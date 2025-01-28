@@ -1,7 +1,7 @@
 [project]
-name = "flask-rest-api-template-datamint"
+name = "flask-rest-api-patas-felizes"
 version = "0.1.0"
-description = "Add your description here"
+description = "Backend Patas Felizes"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

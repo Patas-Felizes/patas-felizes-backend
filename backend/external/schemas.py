@@ -1,8 +1,10 @@
 from marshmallow import Schema, fields
 
-class AuthorizationSchema(Schema):
+class UserSchema(Schema):
+    user_id = fields.Int(dump_only=True)
     username = fields.Str(required=True)
     password = fields.Str(required=True)
+    email = fields.Str(required=True)
     
 class AnimalSchema(Schema):
     animal_id = fields.Int(dump_only=True)

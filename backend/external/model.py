@@ -1,6 +1,38 @@
 from sqlalchemy.orm import Mapped, mapped_column
 from backend.db import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
+# === User ===
+from backend.external.schemas import UserSchema
+
+class UserModel(db.Model):
+    __tablename__ = "tab_user"
+
+    user_id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String, nullable=False)
+    password = db.Column(db.String, nullable=False)
+    email = db.Column(db.String, nullable=False)
+
+    def __init__(self, username, password, email):
+        self.username = username
+        self.password = password
+        self.email = email
+
+    @property
+    def serialize(self):
+        """
+        Retorna os dados do usuário em formato de dicionário, 
+        usando o schema do Marshmallow.
+        """
+        schema = UserSchema()
+        return schema.dump(self)
+    
+    def set_password(self, password: str) -> None:
+        self.password = generate_password_hash(password)
+
+    def check_password(self, raw_password: str) -> bool:
+        return check_password_hash(self.password, raw_password)
+    
 # === Animal ===
 from backend.external.schemas import AnimalSchema
 

@@ -35,7 +35,7 @@ class DefaultConfig:
 
     # Configuration to JWT
     SECRET_KEY = os.environ.get("SECRET_KEY")
-    AUDIENCE = os.environ.get("AUDIENCE")
+    # AUDIENCE = os.environ.get("AUDIENCE")
     
     DATABASE_URL = os.getenv("DATABASE_URL")
 

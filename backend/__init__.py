@@ -1,118 +1,3 @@
-# ENTIDADES E ATRIBUTOS - MOBILE
-# ===
-# Tabela Animal
-# ID (chave primária)
-# Nome
-# Idade (composto): valor, unidade (dias, meses, anos)
-# Foto
-# Descrição
-# Sexo (pré definido): Macho/Fêmea
-# Castracao (só tem duas opções): Sim/Não
-# Status (só tem 6 opções): Para adoção, Adotado, Em tratamento, Em lar temporário, Falecido, Desaparecido
-# Espécie (só tem essas duas opções): Gato/Cachorro
-# DataCadastro(data pega do sistema)
-# ===
-# Tabela Adoção
-# ID (chave primária)
-# AnimalID (chave estrangeira)
-# AdotanteID (chave estrangeira)
-# CompanhaID (chave estrangeira)
-# DataDevolução
-# MotivoDevolução
-# DataAdocao
-# DataCadastro
-# ===
-# Tabela Adotante
-# ID (chave primária)
-# Nome
-# Telefone
-# Email
-# Moradia (composto): Estado, Cidade, Logradouro, Bairro, Numero, CEP
-# ===
-# Tabela Lar temporário
-# ID (chave primária)
-# AnimalID (chave estrangeira)
-# HospedeiroID (chave estrangeira)
-# Período (composto): valor, unidade (dias, meses, anos)
-# DataHospedagem
-# DataCadastro
-# ===
-# Tabela Hospedeiro
-# ID (chave primária)
-# Nome
-# Telefone
-# Email
-# Moradia: Estado, Cidade, Logradouro, Bairro, Numero, CEP
-# ===
-# Tabela Apadrinhamento
-# ID (chave primária)
-# AnimalID (chave estrangeira)
-# NomeApadrinhador (chave estrangeira)
-# Valor
-# Regularidade (pré definido): quinzenalmente, mensalmente, semestralmente
-# ===
-# Tabela Procedimento
-# ID (chave primária)
-# Tipo
-# Descricao
-# Valor
-# DataProcedimento
-# AnimalID (chave estrangeira)
-# VoluntarioID (chave estrangeira)
-# DespesaID (chave estrangeira)
-# ===
-# Tabela Campanha
-# ID (chave primária)
-# Nome
-# Tipo
-# DataInício
-# DataTérmino
-# Descrição
-# Local
-# ===
-# Tabela Doação
-# ID (chave primária)
-# Doador
-# Valor
-# DataDoação
-# AnimalID (chave estrangeira): (se tiver pet associado)
-# CompanhaID (chave estrangeira)
-# EstoqueID
-# Comprovante
-# Tabela Despesa
-# ===
-# ID (chave primária)
-# Valor
-# DataDespesa
-# Tipo
-# AnimalID (chave estrangeira): se tiver pet associado
-# ProcedimentoID (chave estrangeira): se tiver procedimento associado
-# Comprovante
-# Tabela Estoque
-# ===
-# ID (chave primária)
-# Categoria
-# TipoItem
-# Descrição
-# EspecieAnimal
-# Quantidade (composto): valor, unidade  
-# QuantidadeTotal
-# ===
-# Tabela Tarefa
-# ID (chave primária)
-# Tipo
-# Descrição
-# DataTarefa
-# VoluntárioID (chave estrangeira)
-# AnimalID (chave estrangeira): se tiver pet associado
-# ===
-# Tabela Voluntário 
-# ID (chave primária)
-# Nome
-# Foto
-# Email
-# Telefone
-
 import secure
 from flasgger import Swagger
 from flask import Flask
@@ -130,12 +15,12 @@ from backend.blueprints.despesa import despesa_bp
 from backend.blueprints.estoque import estoque_bp
 from backend.blueprints.tarefa import tarefa_bp
 from backend.blueprints.voluntario import voluntario_bp
+from backend.blueprints.home import home_bp
 from backend.blueprints.auth import auth
 from backend.config import get_config
 from backend.db import db
 from backend.extention import cors, migrate
 from backend.utils.logging import configure_logging
-
 
 def create_app():
     app = Flask(__name__)
@@ -163,6 +48,7 @@ def create_app():
     app.register_blueprint(estoque_bp)
     app.register_blueprint(tarefa_bp)
     app.register_blueprint(voluntario_bp)
+    app.register_blueprint(home_bp)
     app.register_blueprint(auth)
 
     # Logging configuration

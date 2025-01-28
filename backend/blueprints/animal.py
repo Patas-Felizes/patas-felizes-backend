@@ -1,10 +1,12 @@
 from flask import Blueprint, request, jsonify
 from backend.services.animal_service import list_animals_service, get_animal_service
 from backend.services.animal_service import create_animal_service, delete_animal_service, update_animal_service
+from backend.utils.decorators import jwt_required
 
 animal_bp = Blueprint("animal", __name__, url_prefix="/animals")
 
 @animal_bp.route("/", methods=["GET"])
+# @jwt_required
 def list_animals():
     """
     Lista todos os animais armazenados no banco de dados.
