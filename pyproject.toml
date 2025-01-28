@@ -1,0 +1,27 @@
+[project]
+name = "flask-rest-api-template-datamint"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "flasgger>=0.9.7.1",
+    "flask>=3.0.3",
+    "flask-cors>=5.0.0",
+    "flask-migrate>=4.0.7",
+    "flask-sqlalchemy>=3.1.1",
+    "gunicorn>=23.0.0",
+    "python-dotenv>=1.0.1",
+    "pytz>=2024.2",
+    "redis>=5.0.8",
+    "secure==0.3.0",
+    "marshmallow>=3.22.0",
+    "pyjwt==2.4.0",
+    "cryptography==43.0.1",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest-mock>=3.14.0",
+    "pytest>=8.3.3",
+]

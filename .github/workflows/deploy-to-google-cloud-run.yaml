@@ -1,0 +1,70 @@
+name: Deploy Cloud Run
+
+on:
+  push:
+    branches:
+      - main # Branch que dispara o deploy
+
+env:
+  PROJECT_ID: poc-eneva-qna #TODO: update Google Cloud project id
+  GAR_LOCATION: us-central1 # TODO: update Artifact Registry location
+  REPOSITORY: repository-flask-template # TODO: update Artifact Registry repository name
+  SERVICE: flask-template-service # TODO: update Cloud Run service name
+
+jobs:
+  push_container:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: 'actions/checkout@v3'
+
+      # Autenticação com Google Cloud
+      - name: 'Google auth'
+        id: "auth"
+        uses: google-github-actions/auth@v1.1.1
+        with:
+          credentials_json: "${{ secrets.GCP_SA_KEY }}"
+
+      # Setup do gcloud CLI/SDK
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      # Autenticação Docker no Artifact Registry
+      - name: 'Docker auth'
+        run: |-
+          gcloud auth configure-docker ${{ env.GAR_LOCATION }}-docker.pkg.dev
+
+      # Build da imagem Docker
+      - name: Build Docker image
+        run: |
+          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}" .
+
+      # Push da imagem Docker para o Artifact Registry
+      - name: Push Docker image to Artifact Registry
+        run: |
+          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}"
+
+      # Deploy no Cloud Run
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v1
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.GAR_LOCATION }}
+          image: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}"
+          # NOTE: Aqui podemos inserir as variávaies de ambiente para o CLOUD RUN
+          env_vars: |
+            APP_ENV=${{ vars.APP_ENV }}
+            APP_NAME=${{ vars.APP_NAME }}
+            DATABASE_URL=${{ vars.DATABASE_URL }}
+            FLASK_APP=${{ vars.FLASK_APP }}
+            FLASK_DEBUG=${{ vars.FLASK_DEBUG }}
+
+      # Exibir URL do serviço Cloud Run
+      - name: Show Output
+        run: echo ${{ steps.deploy.outputs.url }}
