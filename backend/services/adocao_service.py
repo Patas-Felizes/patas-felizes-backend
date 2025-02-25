@@ -49,9 +49,6 @@ def create_adocao_service(adocao_data: AdocaoSchema):
         new_adocao = AdocaoModel(
             animal_id=adocao_data["animal_id"],
             adotante_id=adocao_data["adotante_id"],
-            companha_id=adocao_data["companha_id"],
-            data_devolucao=adocao_data["data_devolucao"],
-            motivo_devolucao=adocao_data["motivo_devolucao"],
             data_adocao=adocao_data["data_adocao"],
             data_cadastro=adocao_data["data_cadastro"],
         )
@@ -104,9 +101,6 @@ def update_adocao_service(adocao_id: int, adocao_data: AdocaoSchema):
 
         adocao_to_update.animal_id = adocao_data["animal_id"]
         adocao_to_update.adotante_id = adocao_data["adotante_id"]
-        adocao_to_update.companha_id = adocao_data["companha_id"]
-        adocao_to_update.data_devolucao = adocao_data["data_devolucao"]
-        adocao_to_update.motivo_devolucao = adocao_data["motivo_devolucao"]
         adocao_to_update.data_adocao = adocao_data["data_adocao"]
         adocao_to_update.data_cadastro = adocao_data["data_cadastro"]
 

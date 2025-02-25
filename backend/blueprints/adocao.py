@@ -26,12 +26,6 @@ def list_adocoes():
             type: integer
           adotante_id:
             type: integer
-          companha_id:
-            type: integer
-          data_devolucao:
-            type: string
-          motivo_devolucao:
-            type: string
           data_adocao:
             type: string
           data_cadastro:
@@ -76,12 +70,6 @@ def get_adocao(adocao_id):
             type: integer
           adotante_id:
             type: integer
-          companha_id:
-            type: integer
-          data_devolucao:
-            type: string
-          motivo_devolucao:
-            type: string
           data_adocao:
             type: string
           data_cadastro:

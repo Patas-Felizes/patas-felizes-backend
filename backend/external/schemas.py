@@ -25,9 +25,6 @@ class AdocaoSchema(Schema):
     adocao_id = fields.Int(dump_only=True)
     animal_id = fields.Int(required=True)
     adotante_id = fields.Int(required=True)
-    companha_id = fields.Int(required=True)
-    data_devolucao = fields.Str(required=True)
-    motivo_devolucao = fields.Str(required=True)
     data_adocao = fields.Str(required=True)
     data_cadastro = fields.Str(required=True)
 

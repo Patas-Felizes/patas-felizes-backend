@@ -75,18 +75,12 @@ class AdocaoModel(db.Model):
     adocao_id: Mapped[int] = mapped_column("adocao_id", primary_key=True)
     animal_id: Mapped[int] = mapped_column("animal_id", nullable=False)
     adotante_id: Mapped[int] = mapped_column("adotante_id", nullable=False)
-    companha_id: Mapped[int] = mapped_column("companha_id", nullable=False)
-    data_devolucao: Mapped[str] = mapped_column("data_devolucao", nullable=False)
-    motivo_devolucao: Mapped[str] = mapped_column("motivo_devolucao", nullable=False)
     data_adocao: Mapped[str] = mapped_column("data_adocao", nullable=False)
     data_cadastro: Mapped[str] = mapped_column("data_cadastro", nullable=False)
 
-    def __init__(self, animal_id, adotante_id, companha_id, data_devolucao, motivo_devolucao, data_adocao, data_cadastro):
+    def __init__(self, animal_id, adotante_id, data_adocao, data_cadastro):
         self.animal_id = animal_id
         self.adotante_id = adotante_id
-        self.companha_id = companha_id
-        self.data_devolucao = data_devolucao
-        self.motivo_devolucao = motivo_devolucao
         self.data_adocao = data_adocao
         self.data_cadastro = data_cadastro
         
