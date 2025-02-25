@@ -34,8 +34,6 @@ def list_procedimentos():
             type: integer
           voluntario_id:
             type: integer
-          despesa_id:
-            type: integer
     responses:
       200:
         description: Lista de procedimentos
@@ -83,8 +81,6 @@ def get_procedimento(procedimento_id):
           animal_id:
             type: integer
           voluntario_id:
-            type: integer
-          despesa_id:
             type: integer
     responses:
       200:

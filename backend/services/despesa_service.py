@@ -49,7 +49,6 @@ def create_despesa_service(despesa: DespesaSchema):
             data_despesa=despesa["data_despesa"],
             tipo=despesa["tipo"],
             animal_id=despesa["animal_id"],
-            procedimento_id=despesa["procedimento_id"],
             comprovante=despesa["comprovante"],
         )
 
@@ -99,7 +98,6 @@ def update_despesa_service(despesa_id: int, despesa: DespesaSchema):
         despesa_to_update.data_despesa = despesa["data_despesa"]
         despesa_to_update.tipo = despesa["tipo"]
         despesa_to_update.animal_id = despesa["animal_id"]
-        despesa_to_update.procedimento_id = despesa["procedimento_id"]
         despesa_to_update.comprovante = despesa["comprovante"]
 
         db.session.commit()

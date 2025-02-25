@@ -31,8 +31,6 @@ def list_despesas():
             type: string
           animal_id:
             type: integer
-          procedimento_id:
-            type: integer
           comprovante:
             type: string
     responses:
@@ -78,8 +76,6 @@ def get_despesa(despesa_id):
           tipo:
             type: string
           animal_id:
-            type: integer
-          procedimento_id:
             type: integer
           comprovante:
             type: string

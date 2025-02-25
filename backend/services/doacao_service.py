@@ -57,7 +57,6 @@ def create_doacao_service(doacao: DoacaoSchema):
             data_doacao=doacao["data_doacao"],
             animal_id=doacao["animal_id"],
             companha_id=doacao["companha_id"],
-            estoque_id=doacao["estoque_id"],
             comprovante=doacao["comprovante"],
         )
 
@@ -119,7 +118,6 @@ def update_doacao_service(doacao_id: int, doacao: DoacaoSchema):
         doacao_to_update.data_doacao = doacao["data_doacao"]
         doacao_to_update.animal_id = doacao["animal_id"]
         doacao_to_update.companha_id = doacao["companha_id"]
-        doacao_to_update.estoque_id = doacao["estoque_id"]
         doacao_to_update.comprovante = doacao["comprovante"]
 
         # Salva as alterações no banco de dados

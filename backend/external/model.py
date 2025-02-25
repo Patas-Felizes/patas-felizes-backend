@@ -35,14 +35,14 @@ class UserModel(db.Model):
     
 # === Animal ===
 from backend.external.schemas import AnimalSchema
-from sqlalchemy import LargeBinary
 
 class AnimalModel(db.Model):
     __tablename__ = "tab_animal"
+
     animal_id: Mapped[int] = mapped_column("animal_id", primary_key=True)
     nome: Mapped[str] = mapped_column("nome", nullable=False)
     idade: Mapped[str] = mapped_column("idade", nullable=False)
-    foto: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)  # Alterado para LargeBinary
+    foto: Mapped[str] = mapped_column("foto", nullable=False)
     descricao: Mapped[str] = mapped_column("descricao", nullable=False)
     sexo: Mapped[str] = mapped_column("sexo", nullable=False)
     castracao: Mapped[str] = mapped_column("castracao", nullable=False)
@@ -53,7 +53,7 @@ class AnimalModel(db.Model):
     def __init__(self, nome, idade, foto, descricao, sexo, castracao, status, especie, data_cadastro):
         self.nome = nome
         self.idade = idade
-        self.foto = foto  # Agora recebe bytes diretamente
+        self.foto = foto
         self.descricao = descricao
         self.sexo = sexo
         self.castracao = castracao
@@ -202,16 +202,14 @@ class ProcedimentoModel(db.Model):
     data_procedimento: Mapped[str] = mapped_column("data_procedimento", nullable=False)
     animal_id: Mapped[int] = mapped_column("animal_id", nullable=False)
     voluntario_id: Mapped[int] = mapped_column("voluntario_id", nullable=False)
-    despesa_id: Mapped[int] = mapped_column("despesa_id", nullable=False)
 
-    def __init__(self, tipo, descricao, valor, data_procedimento, animal_id, voluntario_id, despesa_id):
+    def __init__(self, tipo, descricao, valor, data_procedimento, animal_id, voluntario_id):
         self.tipo = tipo
         self.descricao = descricao
         self.valor = valor
         self.data_procedimento = data_procedimento
         self.animal_id = animal_id
         self.voluntario_id = voluntario_id
-        self.despesa_id = despesa_id
         
     @property
     def serialize(self):
@@ -257,16 +255,14 @@ class DoacaoModel(db.Model):
     data_doacao: Mapped[str] = mapped_column("data_doacao", nullable=False)
     animal_id: Mapped[int] = mapped_column("animal_id", nullable=False)
     companha_id: Mapped[int] = mapped_column("companha_id", nullable=False)
-    estoque_id: Mapped[int] = mapped_column("estoque_id", nullable=False)
     comprovante: Mapped[str] = mapped_column("comprovante", nullable=False)
 
-    def __init__(self, doador, valor, data_doacao, animal_id, companha_id, estoque_id, comprovante):
+    def __init__(self, doador, valor, data_doacao, animal_id, companha_id, comprovante):
         self.doador = doador
         self.valor = valor
         self.data_doacao = data_doacao
         self.animal_id = animal_id
         self.companha_id = companha_id
-        self.estoque_id = estoque_id
         self.comprovante = comprovante
         
     @property
@@ -285,15 +281,13 @@ class DespesaModel(db.Model):
     data_despesa: Mapped[str] = mapped_column("data_despesa", nullable=False)
     tipo: Mapped[str] = mapped_column("tipo", nullable=False)
     animal_id: Mapped[int] = mapped_column("animal_id", nullable=False)
-    procedimento_id: Mapped[int] = mapped_column("procedimento_id", nullable=False)
     comprovante: Mapped[str] = mapped_column("comprovante", nullable=False)
 
-    def __init__(self, valor, data_despesa, tipo, animal_id, procedimento_id, comprovante):
+    def __init__(self, valor, data_despesa, tipo, animal_id, comprovante):
         self.valor = valor
         self.data_despesa = data_despesa
         self.tipo = tipo
         self.animal_id = animal_id
-        self.procedimento_id = procedimento_id
         self.comprovante = comprovante
         
     @property

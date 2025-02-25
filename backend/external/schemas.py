@@ -68,7 +68,6 @@ class ProcedimentoSchema(Schema):
     data_procedimento = fields.Str(required=True)
     animal_id = fields.Int(required=True)
     voluntario_id = fields.Int(required=True)
-    despesa_id = fields.Int(required=True)
 
 class CampanhaSchema(Schema):
     campanha_id = fields.Int(dump_only=True)
@@ -86,7 +85,6 @@ class DoacaoSchema(Schema):
     data_doacao = fields.Str(required=True)
     animal_id = fields.Int(required=True)
     companha_id = fields.Int(required=True)
-    estoque_id = fields.Int(required=True)
     comprovante = fields.Str(required=True)
 
 class DespesaSchema(Schema):
@@ -95,7 +93,6 @@ class DespesaSchema(Schema):
     data_despesa = fields.Str(required=True)
     tipo = fields.Str(required=True)
     animal_id = fields.Int(required=True)
-    procedimento_id = fields.Int(required=True)
     comprovante = fields.Str(required=True)
 
 class EstoqueSchema(Schema):
