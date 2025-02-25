@@ -6,11 +6,14 @@ class UserSchema(Schema):
     password = fields.Str(required=True)
     email = fields.Str(required=True)
     
+from marshmallow import Schema, fields, pre_load, post_dump
+import base64
+
 class AnimalSchema(Schema):
     animal_id = fields.Int(dump_only=True)
     nome = fields.Str(required=True)
     idade = fields.Str(required=True)
-    foto = fields.Str(required=True)
+    foto = fields.Raw(required=True)  # Changed to Raw to handle binary data
     descricao = fields.Str(required=True)
     sexo = fields.Str(required=True)
     castracao = fields.Str(required=True)
