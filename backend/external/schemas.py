@@ -102,7 +102,6 @@ class EstoqueSchema(Schema):
     descricao = fields.Str(required=True)
     especie_animal = fields.Str(required=True)
     quantidade = fields.Str(required=True)
-    quantidade_total = fields.Str(required=True)
 
 class TarefaSchema(Schema):
     tarefa_id = fields.Int(dump_only=True)

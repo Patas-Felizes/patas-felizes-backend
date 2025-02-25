@@ -313,15 +313,13 @@ class EstoqueModel(db.Model):
     descricao: Mapped[str] = mapped_column("descricao", nullable=False)
     especie_animal: Mapped[str] = mapped_column("especie_animal", nullable=False)
     quantidade: Mapped[str] = mapped_column("quantidade", nullable=False)
-    quantidade_total: Mapped[str] = mapped_column("quantidade_total", nullable=False)
 
-    def __init__(self, categoria, tipo_item, descricao, especie_animal, quantidade, quantidade_total):
+    def __init__(self, categoria, tipo_item, descricao, especie_animal, quantidade):
         self.categoria = categoria
         self.tipo_item = tipo_item
         self.descricao = descricao
         self.especie_animal = especie_animal
         self.quantidade = quantidade
-        self.quantidade_total = quantidade_total
         
     @property
     def serialize(self):

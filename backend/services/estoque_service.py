@@ -51,7 +51,6 @@ def create_estoque_service(estoque_data: EstoqueSchema):
             descricao=estoque_data["descricao"],
             especie_animal=estoque_data["especie_animal"],
             quantidade=estoque_data["quantidade"],
-            quantidade_total=estoque_data["quantidade_total"],
         )
 
         # Adiciona ao banco de dados
@@ -100,7 +99,6 @@ def update_estoque_service(estoque_id: int, estoque_data: EstoqueSchema):
         estoque_to_update.descricao = estoque_data["descricao"]
         estoque_to_update.especie_animal = estoque_data["especie_animal"]
         estoque_to_update.quantidade = estoque_data["quantidade"]
-        estoque_to_update.quantidade_total = estoque_data["quantidade_total"]
 
         db.session.commit()
 

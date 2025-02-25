@@ -27,8 +27,6 @@ def list_estoque():
             type: string
           quantidade:
             type: string
-          quantidade_total:
-            type: string
     responses:
         200:
             description: Lista de itens no estoque
@@ -73,8 +71,6 @@ def get_estoque(estoque_id):
           especie_animal:
             type: string
           quantidade:
-            type: string
-          quantidade_total:
             type: string
     responses:
         200:
