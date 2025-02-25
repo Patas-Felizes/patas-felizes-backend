@@ -1,193 +1,132 @@
 from flask import Blueprint, request, jsonify
-from backend.services.animal_service import list_animals_service, get_animal_service
-from backend.services.animal_service import create_animal_service, delete_animal_service, update_animal_service
-from backend.utils.decorators import jwt_required
+import base64
+from backend.services.animal_service import (
+    list_animals_service,
+    get_animal_service,
+    create_animal_service,
+    update_animal_service,
+    delete_animal_service
+)
 
 animal_bp = Blueprint("animal", __name__, url_prefix="/animals")
 
+def decode_foto(base64_str):
+    try:
+        return base64.b64decode(base64_str)
+    except Exception as e:
+        raise ValueError(f"Invalid base64 string: {e}")
+
+def prepare_response_data(animal):
+    """
+    Prepara os dados do animal para retornar pela API,
+    convertendo a foto em formato de base64 string.
+    """
+    if animal is None:
+        return None
+        
+    # Se for uma lista de animais
+    if isinstance(animal, list):
+        return [prepare_response_data(a) for a in animal]
+    
+    # Se for um único animal
+    data = dict(animal)
+    
+    # Converter a foto de bytes para uma string base64
+    if 'foto' in data and data['foto']:
+        if isinstance(data['foto'], (bytes, bytearray)):
+            data['foto'] = base64.b64encode(data['foto']).decode('utf-8')
+    else:
+        # Se não tiver foto ou foto vazia, inicializa como string vazia
+        data['foto'] = ""
+        
+    return data
+
 @animal_bp.route("/", methods=["GET"])
-# @jwt_required
 def list_animals():
     """
     Lista todos os animais armazenados no banco de dados.
-    ---
-    tags:
-      - Animais
-    definitions:
-      AnimalSchema:
-        type: object
-        properties:
-          animal_id:
-            type: integer
-          nome:
-            type: string
-          idade:
-            type: string
-          foto:
-            type: string
-          descricao:
-            type: string
-          sexo:
-            type: string
-          castracao:
-            type: string
-          status:
-            type: string
-          especie:
-            type: string
-          data_cadastro:
-            type: string
-    responses:
-        200:
-            description: Lista de animais
-            schema:
-            type: array
-            items:
-                $ref: '#/definitions/AnimalSchema'
-        404:
-            description: Nenhum animal encontrado no banco de dados.
     """
-    # page = request.args.get("page", 1, type=int)
-    # per_page = request.args.get("per_page", 10, type=int)
-
     response = list_animals_service()
-
     if response["status"] == 200:
-        return jsonify(response["data"])
-
+        # Preparar os dados antes de enviar
+        prepared_data = prepare_response_data(response["data"])
+        return jsonify(prepared_data)
     return jsonify({"message": response["message"]}), response["status"]
 
 @animal_bp.route("/<int:animal_id>", methods=["GET"])
 def get_animal(animal_id):
     """
     Retorna um animal específico do banco de dados.
-    ---
-    tags:
-      - Animais
-    parameters:
-      - in: path
-        name: animal_id
-        type: integer
-        required: true
-    definitions:
-      AnimalSchema:
-        type: object
-        properties:
-          animal_id:
-            type: integer
-          nome:
-            type: string
-          idade:
-            type: string
-          foto:
-            type: string
-          descricao:
-            type: string
-          sexo:
-            type: string
-          castracao:
-            type: string
-          status:
-            type: string
-          especie:
-            type: string
-          data_cadastro:
-            type: string
-    responses:
-        200:
-            description: Animal encontrado
-            schema:
-                $ref: '#/definitions/AnimalSchema'
-        404:
-            description: Animal não encontrado
     """
     response = get_animal_service(animal_id)
-
     if response["status"] == 200:
-        return jsonify(response["data"])
-
+        # Preparar os dados antes de enviar
+        prepared_data = prepare_response_data(response["data"])
+        return jsonify(prepared_data)
     return jsonify({"message": response["message"]}), response["status"]
 
 @animal_bp.route("/", methods=["POST"])
 def create_animal():
     """
     Cria um novo animal no banco de dados.
-    ---
-    tags:
-      - Animais
-    parameters:
-      - in: body
-        name: animal
-        schema:
-          $ref: '#/definitions/AnimalSchema'
-    responses:
-      201:
-        description: Animal criado com sucesso
-        schema:
-          $ref: '#/definitions/AnimalSchema'
-      400:
-        description: Erro ao criar animal
     """
-    animal_data = request.get_json()
+    try:
+        # Get the JSON data from the request
+        animal_data = request.get_json()
+        
+        # Validate and convert foto if present
+        if 'foto' in animal_data:
+            try:
+                animal_data['foto'] = decode_foto(animal_data['foto'])
+            except ValueError as ve:
+                return jsonify({"message": str(ve)}), 400
+        
+        response = create_animal_service(animal_data)
+        if response["status"] == 201:
+            # Preparar os dados antes de enviar na resposta
+            prepared_data = prepare_response_data(response["data"])
+            return jsonify(prepared_data), response["status"]
+        return jsonify({"message": response["message"]}), response["status"]
+    
+    except Exception as e:
+        # Log the full error for debugging
+        import traceback
+        traceback.print_exc()
+        return jsonify({"message": f"Erro interno: {str(e)}"}), 500
 
-    response = create_animal_service(animal_data)
-
-    if response["status"] == 201:
-        return jsonify(response["data"]), response["status"]
-
-    return jsonify({"message": response["message"]}), response["status"]
+@animal_bp.route("/<int:animal_id>", methods=["PUT"])
+def update_animal(animal_id):
+    """
+    Atualiza um animal específico no banco de dados.
+    """
+    try:
+        # Get the JSON data from the request
+        animal_data = request.get_json()
+        
+        # Validate and convert foto if present
+        if 'foto' in animal_data:
+            try:
+                animal_data['foto'] = decode_foto(animal_data['foto'])
+            except ValueError as ve:
+                return jsonify({"message": str(ve)}), 400
+        
+        response = update_animal_service(animal_id, animal_data)
+        if response["status"] == 200:
+            # Preparar os dados antes de enviar
+            prepared_data = prepare_response_data(response["data"])
+            return jsonify(prepared_data)
+        return jsonify({"message": response["message"]}), response["status"]
+    
+    except Exception as e:
+        # Log the full error for debugging
+        import traceback
+        traceback.print_exc()
+        return jsonify({"message": f"Erro interno: {str(e)}"}), 500
 
 @animal_bp.route("/<int:animal_id>", methods=["DELETE"])
 def delete_animal(animal_id):
     """
     Deleta um animal específico do banco de dados.
-    ---
-    tags:
-      - Animais
-    parameters:
-      - in: path
-        name: animal_id
-        type: integer
-        required: true
-    responses:
-      204:
-        description: Animal deletado com sucesso
-      404:
-        description: Animal não encontrado
     """
     response = delete_animal_service(animal_id)
-
-    return jsonify({"message": response["message"]}), response["status"]
-
-@animal_bp.route("/<int:animal_id>", methods=["PUT"])
-def update_animal(animal_id):
-    """
-    Atualiza um animal específico do banco de dados.
-    ---
-    tags:
-      - Animais
-    parameters:
-      - in: path
-        name: animal_id
-        type: integer
-        required: true
-      - in: body
-        name: animal
-        schema:
-          $ref: '#/definitions/AnimalSchema'
-    responses:
-      200:
-        description: Animal atualizado com sucesso
-        schema:
-          $ref: '#/definitions/AnimalSchema'
-      400:
-        description: Erro ao atualizar animal
-    """
-    animal_data = request.get_json()
-
-    response = update_animal_service(animal_id, animal_data)
-
-    if response["status"] == 200:
-        return jsonify(response["data"])
-
     return jsonify({"message": response["message"]}), response["status"]

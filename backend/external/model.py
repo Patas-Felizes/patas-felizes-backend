@@ -35,14 +35,14 @@ class UserModel(db.Model):
     
 # === Animal ===
 from backend.external.schemas import AnimalSchema
+from sqlalchemy import LargeBinary
 
 class AnimalModel(db.Model):
     __tablename__ = "tab_animal"
-
     animal_id: Mapped[int] = mapped_column("animal_id", primary_key=True)
     nome: Mapped[str] = mapped_column("nome", nullable=False)
     idade: Mapped[str] = mapped_column("idade", nullable=False)
-    foto: Mapped[str] = mapped_column("foto", nullable=False)
+    foto: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)  # Alterado para LargeBinary
     descricao: Mapped[str] = mapped_column("descricao", nullable=False)
     sexo: Mapped[str] = mapped_column("sexo", nullable=False)
     castracao: Mapped[str] = mapped_column("castracao", nullable=False)
@@ -53,7 +53,7 @@ class AnimalModel(db.Model):
     def __init__(self, nome, idade, foto, descricao, sexo, castracao, status, especie, data_cadastro):
         self.nome = nome
         self.idade = idade
-        self.foto = foto
+        self.foto = foto  # Agora recebe bytes diretamente
         self.descricao = descricao
         self.sexo = sexo
         self.castracao = castracao
