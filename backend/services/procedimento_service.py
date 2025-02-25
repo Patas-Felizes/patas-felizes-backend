@@ -72,7 +72,6 @@ def create_procedimento_service(data: dict):
             data_procedimento=procedimento_validado["data_procedimento"],
             animal_id=procedimento_validado["animal_id"],
             voluntario_id=procedimento_validado["voluntario_id"],
-            despesa_id=procedimento_validado["despesa_id"],
         )
         
         db.session.add(new_procedimento)
@@ -109,7 +108,6 @@ def update_procedimento_service(procedimento_id: int, data: dict):
         procedimento.data_procedimento = procedimento_validado.get("data_procedimento", procedimento.data_procedimento)
         procedimento.animal_id = procedimento_validado.get("animal_id", procedimento.animal_id)
         procedimento.voluntario_id = procedimento_validado.get("voluntario_id", procedimento.voluntario_id)
-        procedimento.despesa_id = procedimento_validado.get("despesa_id", procedimento.despesa_id)
 
         db.session.commit()
         return {"status": 200, "data": procedimento.serialize}

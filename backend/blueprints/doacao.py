@@ -27,8 +27,6 @@ def list_doacoes():
             type: integer
           companha_id:
             type: integer
-          estoque_id:
-            type: integer
           comprovante:
             type: string
     responses:
@@ -75,8 +73,6 @@ def get_doacao(doacao_id):
           animal_id:
             type: integer
           companha_id:
-            type: integer
-          estoque_id:
             type: integer
           comprovante:
             type: string
